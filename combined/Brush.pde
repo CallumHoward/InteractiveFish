@@ -7,15 +7,15 @@ class Brush {
     this.size = size;
   }
 
-  void drawBrush() {
+  void drawBrush(int x, int y) {
     stroke(#ff0000);
     fill(this.currentColor);
-    ellipse(mouseX, mouseY, this.size, this.size);
+    ellipse(x, y, this.size, this.size);
   }
 
   ArrayList<PVector> getMask(int r0, int c0) {
     ArrayList<PVector> result = new ArrayList<PVector>();
-    final int radius = ceil(this.size / 2);
+    final int radius = ceil(1);
     int r = radius;
     int c = 0;
     int err = 0;

@@ -1,7 +1,7 @@
 // ==== Fish ====
 public class Fish {
-  
-  static final int maxFishEnergy = 10000;
+
+  static final int maxFishEnergy = 2000;
 
   public float x;
   public float y;
@@ -25,15 +25,15 @@ public class Fish {
     this.orientation = 270;
     this.maxSteer = 2;
     this.scale = 2;
-    this.tick = random(50, 100);
+    this.tick = random(100);
     this.fishColor = fishColor;
-    this.fishEnergy = int(random(maxFishEnergy));
+    this.fishEnergy = int(random(maxFishEnergy / 2, maxFishEnergy));
 
     // make fish shape
     this.fishShape = makeShape(this.fishColor, this.scale);
     this.setBearing(random(360));
   }
-  
+
   private PShape makeShape(color c, float s) {
     PShape body = createShape(ELLIPSE, 0, 0, 12, 10);
     body.setStroke(false);
@@ -47,9 +47,9 @@ public class Fish {
     fish.addChild(body);
     fish.addChild(tail);
     fish.scale(s);
-    
+
     fish.rotate(radians(90 + this.orientation));
-        
+
     return fish;
   }
 
@@ -65,21 +65,14 @@ public class Fish {
     this.tick += 0.01;  // determines how fast fish will change their minds
     this.fishEnergy -= 1;
   }
-  
-  public void drawFish() {
-    float dist = 1;
-    float angle = 270 + this.orientation;
-    this.y += dist * sin(radians(angle));
-    this.x += dist * cos(radians(angle));
-  }
 
   public void moveFish(Environment env) {
-    float dist = 1;
+    float dist = 2 * noise(this.tick);
     float angle = 270 + this.orientation;
     PVector newP = new PVector(this.x, this.y);
     newP.x += dist * cos(radians(angle));
     newP.y += dist * sin(radians(angle));
-    
+
     if (env.getInBounds(newP.x / env.scale, newP.y / env.scale) &&
         env.getEType(newP.x / env.scale, newP.y / env.scale) == EType.WATER) {
       this.y = newP.y;
@@ -87,14 +80,14 @@ public class Fish {
       this.maxSteer = 2;
     } else {
       this.maxSteer = 6;
-      this.fishEnergy -= 10;
+      this.fishEnergy -= 20;
     }
   }
-  
+
   public boolean isDead() {
     return this.fishEnergy <= 0;
   }
-  
+
   private void setBearing(float bearing) {
     float diff = bearing - this.orientation;
     this.fishShape.rotate(radians(diff));
