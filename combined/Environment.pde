@@ -68,7 +68,7 @@ class Environment {
   }
   
   Boolean getInBounds(int r, int c) {
-    return r > 1 && r < (this.nRows - 1) && c > 1 && c < (this.nCols - 1); 
+    return r > 0 && r < this.nRows && c > 0 && c < this.nCols; 
   }
   
   Boolean getInBounds(float r, float c) {

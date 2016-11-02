@@ -22,7 +22,9 @@ void setup() {
   
   // add some fish
   for (int i = 0; i < num; ++i) {
-    fishies.add(new Fish(int(random(dW)), int(random(dH)), #5191AA));
+    fishies.add(new Fish(
+        int(random(cellSize, dW - cellSize)), int(random(cellSize, dH - cellSize)),
+        #5191AA));
   }
   
   tick = 0;

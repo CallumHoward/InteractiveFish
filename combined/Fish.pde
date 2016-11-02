@@ -62,16 +62,17 @@ public class Fish {
   public void moveFish(Environment env) {
     float dist = 1;
     float angle = 270 + this.orientation;
-    PVector newP = new PVector(dist * sin(radians(angle)), dist * cos(radians(angle)));
-    newP.y += this.y;
-    newP.x += this.x;
-    if (//env.getInBounds(newP.x / env.scale, newP.y / env.scale) &&
-        env.getEType(newP.y / env.scale, newP.x / env.scale) == EType.WATER) {
+    PVector newP = new PVector(this.x, this.y);
+    newP.x += dist * cos(radians(angle));
+    newP.y += dist * sin(radians(angle));
+    
+    if (env.getInBounds(newP.x / env.scale, newP.y / env.scale) &&
+        env.getEType(newP.x / env.scale, newP.y / env.scale) == EType.WATER) {
       this.y = newP.y;
       this.x = newP.x;
-      //println(newP.x / env.scale, newP.y / env.scale);
+      this.maxSteer = 2;
     } else {
-      //println("land!");
+      this.maxSteer = 6;
     }
   }
   
