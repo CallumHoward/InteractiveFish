@@ -1,5 +1,7 @@
 // ==== Fish ====
 public class Fish {
+  
+  static final int maxFishEnergy = 10000;
 
   public float x;
   public float y;
@@ -8,7 +10,8 @@ public class Fish {
   private float scale;
   private float tick;
   private color fishColor;
-  PShape fishShape;
+  private int fishEnergy;      // (0, maxFishEnergy]
+  private PShape fishShape;
 
   // construct a fish with position x and y
   public Fish(float x, float y) {
@@ -22,34 +25,45 @@ public class Fish {
     this.orientation = 270;
     this.maxSteer = 2;
     this.scale = 2;
-    this.tick = random(100);
+    this.tick = random(50, 100);
     this.fishColor = fishColor;
+    this.fishEnergy = int(random(maxFishEnergy));
 
     // make fish shape
+    this.fishShape = makeShape(this.fishColor, this.scale);
+    this.setBearing(random(360));
+  }
+  
+  private PShape makeShape(color c, float s) {
     PShape body = createShape(ELLIPSE, 0, 0, 12, 10);
     body.setStroke(false);
-    body.setFill(this.fishColor);
+    body.setFill(c);
 
     PShape tail = createShape(TRIANGLE, 0, 0, 10, -5, 10, 5);
     tail.setStroke(false);
-    tail.setFill(this.fishColor);
+    tail.setFill(c);
 
-    this.fishShape = createShape(GROUP);
-    this.fishShape.addChild(body);
-    this.fishShape.addChild(tail);
-    this.fishShape.scale(this.scale);
+    PShape fish = createShape(GROUP);
+    fish.addChild(body);
+    fish.addChild(tail);
+    fish.scale(s);
     
-    this.setBearing(random(360));
+    fish.rotate(radians(90 + this.orientation));
+        
+    return fish;
   }
 
   public void drawFish(Environment env) {
+    float vitality = map(float(this.fishEnergy), 0, maxFishEnergy, 0.5, 1.5);
+    this.fishShape = makeShape(lerpColor(this.fishColor, #e0f0ff, 1 - vitality), this.scale);
     shapeMode(CENTER);
     shape(this.fishShape, this.x, this.y);
     this.moveFish(env);
     // set bearing using perlin noise seeded on tick
     this.setBearing(this.orientation +
         map(noise(this.tick), 0, 1, -this.maxSteer, this.maxSteer));
-    this.tick += 0.01;  // determins how fast fish will change their minds
+    this.tick += 0.01;  // determines how fast fish will change their minds
+    this.fishEnergy -= 1;
   }
   
   public void drawFish() {
@@ -73,7 +87,12 @@ public class Fish {
       this.maxSteer = 2;
     } else {
       this.maxSteer = 6;
+      this.fishEnergy -= 10;
     }
+  }
+  
+  public boolean isDead() {
+    return this.fishEnergy <= 0;
   }
   
   private void setBearing(float bearing) {

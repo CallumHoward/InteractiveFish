@@ -23,8 +23,8 @@ void setup() {
   // add some fish
   for (int i = 0; i < num; ++i) {
     fishies.add(new Fish(
-        int(random(cellSize, dW - cellSize)), int(random(cellSize, dH - cellSize)),
-        #5191AA));
+        int(random(cellSize, dW - cellSize)),
+        int(random(cellSize, dH - cellSize)), #5191AA));
   }
   
   tick = 0;
@@ -40,6 +40,14 @@ void draw() {
   // Draw the fish
   for (int i = 0; i < num; i++) {
     Fish f = fishies.get(i);
+    
+    if (f.isDead()) {
+      fishies.set(i, new Fish(
+        int(random(cellSize, dW - cellSize)),
+        int(random(cellSize, dH - cellSize)), #5191AA));
+        f = fishies.get(i);
+    }
+    
     f.drawFish(env);
     //if (env.getColor(int(f.x / env.scale), int(f.y / env.scale)) != EType.WATER);
   }
