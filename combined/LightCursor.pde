@@ -6,10 +6,11 @@ class LightCursor {
   Capture frame;
   OpenCV opencv;
 
+  static final int threshold = 15000000;
+
   PVector pos = new PVector();  // position
   PVector loc = new PVector();
   PVector locMin = new PVector();
-  static final int threshold = 15000000;
   float easing;
 
   int width1, height1;

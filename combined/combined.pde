@@ -7,6 +7,7 @@ final int cellSize = 40;
 Environment env = new Environment(int(dW / cellSize), int(dH / cellSize), cellSize);
 EType currentEType = EType.SAND;
 Brush cursor = new Brush(env.colors.get(EType.SAND), cellSize);
+boolean brushChange = true;
 
 int tick = 0;
 int num = 50;  // initial number of fish
@@ -45,9 +46,14 @@ void draw() {
   if (lc != null) {
     lc.readFrame();
     if (lc.isVisible()) {
+      brushChange = false;
       //PVector brightest = lc.draw();  // debug
       PVector brightest = lc.getBrightest();
       cursor.drawBrush(brightest.x, brightest.y);
+
+    } else if (!brushChange) {
+      brushChange = true;
+      cycleBrush();
     }
   }
 
@@ -75,7 +81,7 @@ void mouseDragged() {
   }
 }
 
-void keyPressed() {
+void cycleBrush() {
   switch (currentEType) {
     case WATER: currentEType = EType.SAND; break;
     case SAND: currentEType = EType.GRASS; break;
@@ -84,6 +90,8 @@ void keyPressed() {
   }
   cursor.currentColor = env.colors.get(currentEType);
 }
+
+void keyPressed() { cycleBrush(); }
 
 void intro() {
   // create the font
