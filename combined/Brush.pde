@@ -7,6 +7,10 @@ class Brush {
     this.size = size;
   }
 
+  void drawBrush(float x, float y) {
+    drawBrush(int(x), int(y));
+  }
+
   void drawBrush(int x, int y) {
     stroke(#ff0000);
     fill(this.currentColor);

@@ -13,7 +13,7 @@ int num = 50;  // initial number of fish
 ArrayList<Fish> fishies = new ArrayList<Fish>();
 
 Capture camera;
-LightCursor lc = null;
+LightCursor lc;
 
 int init = 0;
 
@@ -35,17 +35,24 @@ void setup() {
 }
 
 void draw() {
-  //if (init == 0) { intro(); init++; return; }
-  //if (init == 1) { cameraSetup(); init++; }
+  if (init == 0) { intro(); init++; return; }
+  if (init == 1) { cameraSetup(); init++; }
 
-  background(#e0f0ff);
+  background(#e0f0ff);  // clear screen between frames
   env.drawEnvironment();
 
   // draw cursor
-  cursor.drawBrush(mouseX, mouseY);
+  if (lc != null) {
+    lc.readFrame();
+    if (lc.isVisible()) {
+      //PVector brightest = lc.draw();  // debug
+      PVector brightest = lc.getBrightest();
+      cursor.drawBrush(brightest.x, brightest.y);
+    }
+  }
 
   // Draw the fish
-  for (int i = 0; i < num; i++) {
+  for (int i = 0; i < num; ++i) {
     Fish f = fishies.get(i);
 
     if (f.isDead()) {
@@ -56,13 +63,9 @@ void draw() {
     }
 
     f.drawFish(env);
-    //if (env.getColor(int(f.x / env.scale), int(f.y / env.scale)) != EType.WATER);
   }
 
-  if (++tick == 15) {
-    //println(frameRate);  //TODO comment this
-    tick = 0;
-  }
+  if (++tick == 15) { tick = 0; }
 }
 
 void mouseDragged() {
@@ -96,11 +99,12 @@ void intro() {
 void cameraSetup() {
     // find connected cemera names
     String[] cameras = Capture.list();
-    for (int i = 0; i < cameras.length; i++) {
-      println(cameras[i]);
-    }
-    camera = new Capture(this, width, height, cameras[0], 30);   // 15 for external webcam
-    camera.start();
+    for (int i = 0; i < cameras.length; i++) { println(cameras[i]); }
 
-    lc = new LightCursor(this, displayWidth, displayHeight, camera);
+    camera = new Capture(this, dW, dH, 30);   // 15 for external webcam
+    lc = new LightCursor(this, dW, dH, camera);
+
+    camera.start();
 }
+
+void captureEvent(Capture c) { c.read(); }
