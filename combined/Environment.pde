@@ -37,8 +37,8 @@ class Environment {
   void drawEnvironment() {
     PGraphics pg = createGraphics(this.nRows * this.scale, this.nCols * this.scale);
     pg.beginDraw();
-    pg.stroke(#ffffff);
-    //pg.noStroke();
+    //pg.stroke(#ffffff);  // for grid
+    pg.noStroke();  // no grid
     pg.fill(#e0f0ff);
 
     for (int r = 0; r < env.nRows; ++r) {

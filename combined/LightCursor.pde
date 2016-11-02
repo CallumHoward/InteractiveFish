@@ -47,7 +47,7 @@ class LightCursor {
   boolean isVisible() {
     final int maxPx = this.frame.get(int(loc.x), int(loc.y));
     final int minPx = this.frame.get(int(locMin.x), int(locMin.y));
-    //println(maxPx - minPx);  // for calibration
+    //println(maxPx - minPx);  // debug: for calibration
     return maxPx - minPx >= threshold;
   }
 

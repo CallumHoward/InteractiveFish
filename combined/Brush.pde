@@ -17,6 +17,10 @@ class Brush {
     ellipse(x, y, this.size, this.size);
   }
 
+  ArrayList<PVector> getMask(float r0, float c0) {
+    return getMask(int(r0), int(c0));
+  }
+
   ArrayList<PVector> getMask(int r0, int c0) {
     ArrayList<PVector> result = new ArrayList<PVector>();
     final int radius = ceil(1);
