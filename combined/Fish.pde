@@ -73,11 +73,19 @@ public class Fish {
     newP.x += dist * cos(radians(angle));
     newP.y += dist * sin(radians(angle));
 
+    EType xyEType = env.getEType(newP.x / env.scale, newP.y / env.scale);
+
     if (env.getInBounds(newP.x / env.scale, newP.y / env.scale) &&
-        env.getEType(newP.x / env.scale, newP.y / env.scale) == EType.WATER) {
+        xyEType == EType.WATER) {
       this.y = newP.y;
       this.x = newP.x;
       this.maxSteer = 2;
+
+    } else if (xyEType == EType.FOOD) {
+      this.fishEnergy += 300;
+      this.maxSteer = 1;
+      env.changeCell(newP.x / env.scale, newP.y / env.scale, EType.WATER);
+
     } else {
       this.maxSteer = 6;
       this.fishEnergy -= 20;

@@ -12,7 +12,7 @@ class Brush {
   }
 
   void drawBrush(int x, int y) {
-    stroke(#ff0000);
+    stroke(#ffffff);
     fill(this.currentColor);
     ellipse(x, y, this.size, this.size);
   }

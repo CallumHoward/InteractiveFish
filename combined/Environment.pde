@@ -4,7 +4,8 @@ enum EType {
   WATER,
   SAND,
   GRASS,
-  ROCK
+  ROCK,
+  FOOD
 }
 
 static class Card {
@@ -27,7 +28,8 @@ class Environment {
     this.colors.put(EType.WATER, #e0f0ff);
     this.colors.put(EType.SAND,  #f4f3a6);
     this.colors.put(EType.GRASS, #cef4a6);
-    this.colors.put(EType.ROCK,  #e5d1b3);
+    this.colors.put(EType.ROCK,  #8c8b6d);
+    this.colors.put(EType.FOOD,  #efac5b);
 
     for (int r = 0; r < nRows; ++r) {
       for (int c = 0; c < nCols; ++c) { map[r][c] = EType.WATER; }
@@ -43,7 +45,7 @@ class Environment {
 
     for (int r = 0; r < env.nRows; ++r) {
       for (int c = 0; c < env.nCols; ++c) {
-        pg.fill(this.getColor(r, c));      
+        pg.fill(this.getColor(r, c));
         pg.rect(r * scale, c * scale, scale, scale);
       }
     }
@@ -66,11 +68,11 @@ class Environment {
 
     return result;
   }
-  
+
   Boolean getInBounds(int r, int c) {
     return r > 0 && r < this.nRows && c > 0 && c < this.nCols; 
   }
-  
+
   Boolean getInBounds(float r, float c) {
     return getInBounds(int(r), int(c));
   }
@@ -82,6 +84,8 @@ class Environment {
   EType getEType(float r, float c) {
     return getEType(int(r), int(c));
   }
+
+  void changeCell(float r, float c, EType t) { changeCell(int(r), int(c), t); }
 
   void changeCell(int r, int c, EType t) {
     // ensure array is not overflowed

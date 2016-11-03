@@ -99,17 +99,26 @@ void mouseDragged() {
 }
 
 void applyBrush(float x, float y) {
+  EType brush = currentEType;
+  EType xyEType = env.getEType(x / env.scale, y / env.scale);
+
+  if (currentEType == EType.SAND &&
+      (xyEType == EType.SAND || xyEType == EType.GRASS)) {
+    brush = EType.GRASS;
+  }
+
   for (PVector filled : cursor.getMask(x / env.scale, y / env.scale)) {
-    env.changeCell(int(filled.x), int(filled.y), currentEType);
+    env.changeCell(filled.x, filled.y, brush);
   }
 }
 
 void cycleBrush() {
   switch (currentEType) {
     case WATER: currentEType = EType.SAND; break;
-    case SAND: currentEType = EType.GRASS; break;
-    case GRASS: currentEType = EType.ROCK; /*cursor.size /= 4;*/ break;
-    case ROCK: currentEType = EType.WATER; /*cursor.size *= 4;*/ break;
+    case SAND:  currentEType = EType.ROCK; cursor.size /= 4; break;
+    case ROCK:  currentEType = EType.FOOD; break;
+    case FOOD:  currentEType = EType.WATER; cursor.size *= 4; break;
+    //case GRASS: currentEType = EType.ROCK; /*cursor.size /= 4;*/ break;
   }
   cursor.currentColor = env.colors.get(currentEType);
 }
