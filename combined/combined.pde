@@ -6,9 +6,11 @@ final String[] titles = {
 };
 
 // render size details
-final int dW = 960;
-final int dH = 540;
-final int cellSize = 20;
+final int dW = 1720;
+final int dH = 1080;
+//final int dW = 960;
+//final int dH = 540;
+final int cellSize = 40;
 
 Environment env = new Environment(int(dW / cellSize), int(dH / cellSize), cellSize);
 EType currentEType = EType.SAND;
@@ -32,8 +34,8 @@ int init = 0;
 
 void setup() {
   // initialise window
-  //fullScreen();
-  size(960, 540);
+  fullScreen();
+  //size(960, 540);
   //frameRate(30);
 
   // initial blank screen
@@ -50,11 +52,12 @@ void setup() {
 void draw() {
   if (init == 0) { intro(); init++; return; }
   if (init == 1) { cameraSetup(); init++; return; }
+  init = 6;  // uncomment to skip title intro
   if (init == 2 && fader > 0) { title(titles[0]); return; }
   if (init == 3 && fader > 0) { title(titles[1]); return; }
   if (init == 4 && fader > 0) { title(titles[2]); return; }
   if (init == 5 && fader > 0) { title(titles[3]); return; }
-  init++;
+  //init++;
 
   background(#e0f0ff);  // clear screen between frames
   env.drawEnvironment();
@@ -140,7 +143,7 @@ void cycleBrush() {
 void intro() {
   // create the font
   printArray(PFont.list());
-  PFont f = createFont("BrushScript.ttf", 48, true);
+  PFont f = createFont("BrushScript.ttf", 72, true);
   textFont(f);
 
   textAlign(CENTER);
@@ -153,7 +156,7 @@ void cameraSetup() {
     String[] cameras = Capture.list();
     for (int i = 0; i < cameras.length; i++) { println(cameras[i]); }
 
-    camera = new Capture(this, dW, dH, 30);   // 15 for external webcam
+    camera = new Capture(this, dW, dH, cameras[0], 30);   // 15 for external webcam
     lc = new LightCursor(this, dW, dH, camera);
 
     camera.start();

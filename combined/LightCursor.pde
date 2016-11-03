@@ -6,7 +6,7 @@ class LightCursor {
   Capture frame;
   OpenCV opencv;
 
-  static final int threshold = 15000000;
+  static final int threshold = 10000000;
 
   PVector pos = new PVector();  // position
   PVector loc = new PVector();
@@ -47,7 +47,7 @@ class LightCursor {
   boolean isVisible() {
     final int maxPx = this.frame.get(int(loc.x), int(loc.y));
     final int minPx = this.frame.get(int(locMin.x), int(locMin.y));
-    //println(maxPx - minPx);  // debug: for calibration
+    println(maxPx - minPx);  // debug: for calibration
     return maxPx - minPx >= threshold;
   }
 
