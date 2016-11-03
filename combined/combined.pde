@@ -1,3 +1,9 @@
+final String[] titles = {
+  "In this world, many creatures\nlives continuously come to an end.",
+  "…yet life grows and evolves.",
+  "In this temporal machine, our universe…",
+  "how will you leave your mark?"
+};
 
 // render size details
 final int dW = 960;
@@ -13,6 +19,9 @@ float movementCounter = 0;
 boolean brushChange = true;
 
 int tick = 0;
+int fader = 1;
+int fadeTime = 90;
+boolean fadeIn = true;
 int num = 50;  // initial number of fish
 ArrayList<Fish> fishies = new ArrayList<Fish>();
 
@@ -40,7 +49,12 @@ void setup() {
 
 void draw() {
   if (init == 0) { intro(); init++; return; }
-  if (init == 1) { cameraSetup(); init++; }
+  if (init == 1) { cameraSetup(); init++; return; }
+  if (init == 2 && fader > 0) { title(titles[0]); return; }
+  if (init == 3 && fader > 0) { title(titles[1]); return; }
+  if (init == 4 && fader > 0) { title(titles[2]); return; }
+  if (init == 5 && fader > 0) { title(titles[3]); return; }
+  init++;
 
   background(#e0f0ff);  // clear screen between frames
   env.drawEnvironment();
@@ -143,6 +157,33 @@ void cameraSetup() {
     lc = new LightCursor(this, dW, dH, camera);
 
     camera.start();
+}
+
+void title(String titleMsg) {
+  background(#000000);
+  textAlign(CENTER);
+
+  // draw white title text
+  fill(#ffffff);
+  text(titleMsg, dW / 2, dH / 2);
+
+  fade();
+}
+
+void fade() {
+  // draw black rectangle over the top
+  fill(#000000, map(fader, 0, fadeTime, 255, 0));
+  if (fader >= fadeTime * 2) { fadeIn = false; }
+  if (fadeIn == true) {
+    fader++;
+  } else {
+    fader--;
+  }
+
+  rect(0, 0, dW, dH);
+
+  // reset for next title
+  if (fader <= 0) { init++; fader = 1; fadeIn = true; }
 }
 
 void keyPressed() { cycleBrush(); }
